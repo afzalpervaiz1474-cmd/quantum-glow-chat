@@ -1,24 +1,42 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { lazy, Suspense, useCallback, useState } from "react";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { ChatConsole } from "@/components/chat/chat-console";
+import type { SceneMode } from "@/components/quantum-scene";
+
+const title = "NEXUS AI — 3D Quantum Chat Console";
+const description =
+  "A futuristic AI chat agent with token-by-token streaming, Gemini and ChatGPT switching with automatic failover, inside a reactive 3D quantum environment.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+// Three.js must not evaluate during SSR — load the scene after hydration.
+const QuantumScene = lazy(() =>
+  import("@/components/quantum-scene").then((m) => ({ default: m.QuantumScene })),
+);
+
 function Index() {
+  const [mode, setMode] = useState<SceneMode>("idle");
+  const onModeChange = useCallback((next: SceneMode) => setMode(next), []);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="relative h-[100dvh] w-full overflow-hidden">
+      <Suspense fallback={<div className="fixed inset-0 -z-10 bg-background" />}>
+        <QuantumScene mode={mode} />
+      </Suspense>
+      <ChatConsole onModeChange={onModeChange} />
+    </main>
   );
 }
