@@ -3,13 +3,20 @@ import { z } from "zod";
 
 import { streamChat } from "@/lib/ai/stream.server";
 
+const attachmentSchema = z.object({
+  name: z.string().max(200),
+  mime: z.string().max(100),
+  dataUrl: z.string().max(8_000_000),
+});
+
 const bodySchema = z.object({
   provider: z.enum(["openai", "gemini"]),
   messages: z
     .array(
       z.object({
         role: z.enum(["user", "assistant", "system"]),
-        content: z.string().min(1).max(20000),
+        content: z.string().max(20000),
+        images: z.array(attachmentSchema).max(4).optional(),
       }),
     )
     .min(1)
