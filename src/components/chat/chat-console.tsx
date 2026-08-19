@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Bot, RotateCcw, Settings2, Sparkle, Square } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Conversation,
@@ -41,9 +41,9 @@ export function ChatConsole({ onModeChange }: { onModeChange: (mode: SceneMode) 
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   // Keep the 3D scene in sync with the conversation lifecycle.
-  if (typeof window !== "undefined") {
-    queueMicrotask(() => onModeChange(status as SceneMode));
-  }
+  useEffect(() => {
+    onModeChange(status as SceneMode);
+  }, [status, onModeChange]);
 
   const busy = status !== "idle";
 
