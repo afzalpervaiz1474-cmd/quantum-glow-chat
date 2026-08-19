@@ -26,3 +26,10 @@ export const PROVIDER_LABELS: Record<ProviderId, string> = {
 export const SYSTEM_PROMPT =
   "You are NEXUS, an advanced AI assistant rendered inside a futuristic 3D interface. " +
   "Answer precisely and helpfully. Use GitHub-flavored markdown, and always fence code blocks with the correct language tag.";
+
+export interface StreamEvent {
+  type: "meta" | "delta" | "error" | "done";
+  provider?: ProviderId;
+  fallback?: boolean;
+  text?: string;
+}

@@ -1,5 +1,4 @@
-import type { ChatMessage, ProviderId } from "./types";
-import type { StreamEvent } from "./stream.server";
+import type { ChatMessage, ProviderId, StreamEvent } from "./types";
 
 export type { StreamEvent };
 

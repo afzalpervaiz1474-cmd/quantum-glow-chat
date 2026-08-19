@@ -1,5 +1,7 @@
-import type { ChatMessage, ProviderId, ProviderKeys } from "./types";
+import type { ChatMessage, ProviderId, ProviderKeys, StreamEvent } from "./types";
 import { SYSTEM_PROMPT } from "./types";
+
+export type { StreamEvent };
 
 /**
  * Normalized text-delta stream for a provider.
@@ -190,13 +192,6 @@ function streamFor(provider: ProviderId, messages: ChatMessage[], keys: Provider
         messages,
         "Gemini",
       );
-}
-
-export interface StreamEvent {
-  type: "meta" | "delta" | "error" | "done";
-  provider?: ProviderId;
-  fallback?: boolean;
-  text?: string;
 }
 
 /**
