@@ -5,9 +5,9 @@ import type { ChatMessage, ProviderId } from "@/lib/ai/types";
 
 export interface UiMessage extends ChatMessage {
   id: string;
-  provider?: ProviderId;
-  fallback?: boolean;
-  error?: boolean;
+  provider?: ProviderId | undefined;
+  fallback?: boolean | undefined;
+  error?: boolean | undefined;
 }
 
 export type ChatStatus = "idle" | "thinking" | "streaming";
